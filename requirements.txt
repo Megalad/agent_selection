@@ -1,3 +1,4 @@
 pandas
 sentence-transformers
-chromadb
+chromadb==<compatible_version>
+
