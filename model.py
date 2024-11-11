@@ -11,9 +11,8 @@ model = SentenceTransformer('all-mpnet-base-v2')
 class EmbeddingManager:
     def __init__(self, folder_path):
         self.folder_path = folder_path
-        self.client = chromadb.Client()  # Initializes ChromaDB client
+        self.client = chromadb.Client()  
         
-        # Check if the collection exists, if not, create it
         existing_collections = [collection.name for collection in self.client.list_collections()]
         if "agent_descriptions" in existing_collections:
             self.collection = self.client.get_collection(name="agent_descriptions")
@@ -114,7 +113,7 @@ class EmbeddingManager:
 
                 agent_embedding = model.encode(agent_description)
 
-                # Calculate cosine similarity directly
+                # Calculate cosine similarity
                 dot_product = sum(q * a for q, a in zip(query_embedding, agent_embedding))
                 norm_q = sum(q * q for q in query_embedding) ** 0.5
                 norm_a = sum(a * a for a in agent_embedding) ** 0.5
@@ -139,8 +138,7 @@ class EmbeddingManager:
             print("No suitable agent found.")
             return None
 
-# Example usage
-folder_path = 'data/agents'  # Path to your folder containing JSON files
+folder_path = 'data/agents'  
 embedding_manager = EmbeddingManager(folder_path)
 embedding_manager.generate_and_store_embeddings()
 
